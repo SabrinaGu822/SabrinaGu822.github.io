@@ -26,6 +26,53 @@ layout: default
   </div>
 </section>
 
+<section class="cozy-section" aria-label="小窝日常">
+  <div class="cozy-heading">
+    <p class="eyebrow">LITTLE THINGS · 03</p>
+    <h2>小窝日常</h2>
+    <p>天气、远方的时间，还有一句刚好读到的话。</p>
+  </div>
+  <div class="cozy-grid">
+    <article class="cozy-card weather-card">
+      <div class="cozy-card-top"><span class="cozy-icon">☼</span><span class="cozy-label">WEATHER CORNER</span></div>
+      <h3>窗外的天气</h3>
+      <p class="cozy-description" id="weather-status" aria-live="polite">想知道你那里的天气吗？点击按钮看看。</p>
+      <div class="weather-result" id="weather-result" hidden>
+        <strong id="weather-temp">--°</strong>
+        <span id="weather-detail"></span>
+      </div>
+      <button class="cozy-button" id="weather-button" type="button">看看我这里的天气 ↗</button>
+      <small class="cozy-footnote">仅在点击后请求定位；位置仅用于本次天气查询。</small>
+    </article>
+
+    <article class="cozy-card world-card">
+      <div class="cozy-card-top"><span class="cozy-icon">◷</span><span class="cozy-label">TIME AROUND THE WORLD</span></div>
+      <h3>远方此刻</h3>
+      <div class="world-clock-list">
+        <div class="world-clock-row"><span>LOS ANGELES</span><time data-world-clock="America/Los_Angeles">--:--:--</time></div>
+        <div class="world-clock-row"><span>LONDON</span><time data-world-clock="Europe/London">--:--:--</time></div>
+        <div class="world-clock-row"><span>TOKYO</span><time data-world-clock="Asia/Tokyo">--:--:--</time></div>
+      </div>
+      <p class="cozy-footnote">世界很大，此刻都有人在认真生活。</p>
+    </article>
+
+    <article class="cozy-card quote-card">
+      <div class="cozy-card-top"><span class="cozy-icon">✳</span><span class="cozy-label">A LITTLE REMINDER</span></div>
+      <h3>今日的一句话</h3>
+      <blockquote id="daily-quote">慢一点也没关系，花会按自己的时间开放。</blockquote>
+      <button class="cozy-button" id="quote-button" type="button">再读一句 ↻</button>
+    </article>
+
+    <article class="cozy-card days-card">
+      <div class="cozy-card-top"><span class="cozy-icon">⌁</span><span class="cozy-label">OUR LITTLE HOME</span></div>
+      <h3>小窝已经亮灯</h3>
+      <div class="days-count"><strong id="site-days">1</strong><span>天</span></div>
+      <p class="cozy-description">从第一天开始，认真收藏生活里的微光。</p>
+      <small class="cozy-footnote">EST. NOVEMBER 22, 2026</small>
+    </article>
+  </div>
+</section>
+
 <section class="section-head" id="latest">
   <div><p class="eyebrow">THE JOURNAL · 01</p><h2>最近的记录</h2></div>
   <span class="muted">不必完整，真实就好。</span>
