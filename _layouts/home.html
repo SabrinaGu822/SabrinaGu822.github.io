@@ -30,6 +30,25 @@ layout: default
   <div class="empty-state"><span>✳</span><h3>第一篇故事，等你来写。</h3><p>登录 Pages CMS，点击「文章」→「新建」，写下今天想留下的事。</p></div>
   {% endfor %}
 </div>
+
+<section class="section-head" id="moments">
+  <div><p class="eyebrow">VISUAL NOTES</p><h2>光影收藏</h2></div>
+  <a class="muted" href="{{ '/photos/' | relative_url }}">所有照片 →</a>
+</section>
+<div class="photo-grid">
+  {% assign photo_posts = site.categories.photos | sort: 'date' | reverse %}
+  {% for post in photo_posts limit: 6 %}
+    {% if post.cover %}
+      <a class="photo-tile" href="{{ post.url | relative_url }}">
+        <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}">
+        <span>{{ post.title }}</span>
+      </a>
+    {% endif %}
+  {% else %}
+    <div class="photo-empty">这里会收藏你发布在「照片」分类中的文章封面。上传照片并将分类设为 photos 后，它们就会出现在这里。</div>
+  {% endfor %}
+</div>
+
 <section class="note-band">
   <span class="note-icon">✳</span>
   <p>“愿我们在时间的深海里，仍能听见内心的回声。”</p>
