@@ -1,0 +1,69 @@
+media:
+  input: assets/images
+  output: /assets/images
+  rename: safe
+  categories: [image]
+
+content:
+  - name: posts
+    label: 文章
+    type: collection
+    path: _posts
+    format: yaml-frontmatter
+    filename: "{fields.date}-{fields.slug}.md"
+    view:
+      fields: [title, date, category, tags]
+      sort: [date, title]
+      order: desc
+      primary: title
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+      - name: date
+        label: 发布时间
+        type: date
+        required: true
+      - name: slug
+        label: URL别名（英文或拼音）
+        type: string
+        required: true
+        pattern: "^[a-z0-9-]+$"
+      - name: category
+        label: 分类
+        type: select
+        options:
+          values:
+            - label: 日记与随笔
+              value: diary
+            - label: 旅行
+              value: travel
+            - label: 照片
+              value: photos
+            - label: 学习笔记
+              value: notes
+            - label: 读书与观影
+              value: reading
+            - label: 生活碎片
+              value: fragments
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+      - name: excerpt
+        label: 摘要
+        type: text
+      - name: cover
+        label: 封面图片
+        type: image
+      - name: body
+        label: 正文
+        type: rich-text
+        options:
+          media: false
+          switcher: true
+
+settings:
+  content:
+    merge: true
