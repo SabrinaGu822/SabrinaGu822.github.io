@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080f18">
   {% seo %}
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v=20261122-dark02">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v=20261122-cozy01">
   {% feed_meta %}
 </head>
 <body>
@@ -77,6 +77,103 @@
         }
       }
 
+      function updateWorldClocks() {
+        document.querySelectorAll('[data-world-clock]').forEach(function (el) {
+          const tz = el.getAttribute('data-world-clock');
+          el.textContent = new Intl.DateTimeFormat('zh-CN', {
+            timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+          }).format(new Date());
+        });
+      }
+
+      const littleQuotes = [
+        '慢一点也没关系，花会按自己的时间开放。',
+        '把平凡的日子过得闪闪发光，也是一种了不起。',
+        '生活不必总有答案，偶尔有风、有光、有喜欢就很好。',
+        '愿你走过的每一段路，都留下温柔的回声。',
+        '今天也请记得，给自己一点耐心和拥抱。',
+        '世界很大，先好好照顾自己的小小宇宙。',
+        '不必成为谁的光，先允许自己被温柔照亮。',
+        '那些看似微小的快乐，正在悄悄拼成生活。',
+        '愿每一次出发都有期待，每一次归来都有灯火。',
+        '日子是自己的，慢慢来，也很美。'
+      ];
+      const quote = document.getElementById('daily-quote');
+      const quoteButton = document.getElementById('quote-button');
+      let lastQuoteIndex = -1;
+      function showQuote() {
+        if (!quote) return;
+        let next = Math.floor(Math.random() * littleQuotes.length);
+        if (littleQuotes.length > 1 && next === lastQuoteIndex) next = (next + 1) % littleQuotes.length;
+        lastQuoteIndex = next;
+        quote.textContent = littleQuotes[next];
+      }
+      if (quoteButton) quoteButton.addEventListener('click', showQuote);
+
+      const siteDays = document.getElementById('site-days');
+      if (siteDays) {
+        const start = new Date(2026, 10, 22);
+        const today = new Date();
+        const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const elapsed = Math.floor((todayOnly - start) / 86400000) + 1;
+        siteDays.textContent = String(Math.max(1, elapsed));
+      }
+
+      const weatherButton = document.getElementById('weather-button');
+      const weatherStatus = document.getElementById('weather-status');
+      const weatherResult = document.getElementById('weather-result');
+      const weatherTemp = document.getElementById('weather-temp');
+      const weatherDetail = document.getElementById('weather-detail');
+      const weatherWords = {
+        0: '晴朗', 1: '大致晴朗', 2: '局部多云', 3: '阴天',
+        45: '有雾', 48: '雾凇', 51: '毛毛雨', 53: '小雨', 55: '中雨',
+        56: '冻毛毛雨', 57: '强冻毛毛雨', 61: '小雨', 63: '中雨', 65: '大雨',
+        66: '冻雨', 67: '强冻雨', 71: '小雪', 73: '中雪', 75: '大雪',
+        77: '雪粒', 80: '阵雨', 81: '较强阵雨', 82: '强阵雨',
+        85: '阵雪', 86: '强阵雪', 95: '雷雨', 96: '雷雨伴小冰雹', 99: '雷雨伴冰雹'
+      };
+      if (weatherButton) weatherButton.addEventListener('click', function () {
+        if (!navigator.geolocation) {
+          if (weatherStatus) weatherStatus.textContent = '当前浏览器不支持定位功能，可以稍后换个浏览器试试。';
+          return;
+        }
+        weatherButton.disabled = true;
+        weatherButton.textContent = '正在查看天气…';
+        if (weatherStatus) weatherStatus.textContent = '正在请求位置权限，请在浏览器弹窗中选择允许。';
+        navigator.geolocation.getCurrentPosition(async function (position) {
+          try {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const endpoint = 'https://api.open-meteo.com/v1/forecast?latitude=' +
+              encodeURIComponent(lat) + '&longitude=' + encodeURIComponent(lon) +
+              '&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto';
+            const response = await fetch(endpoint);
+            if (!response.ok) throw new Error('weather request failed');
+            const data = await response.json();
+            const current = data.current;
+            const description = weatherWords[current.weather_code] || '天气信息已更新';
+            if (weatherTemp) weatherTemp.textContent = Math.round(current.temperature_2m) + '°';
+            if (weatherDetail) weatherDetail.textContent = description + ' · 体感 ' +
+              Math.round(current.apparent_temperature) + '° · 湿度 ' +
+              current.relative_humidity_2m + '% · 风速 ' + current.wind_speed_10m + ' km/h';
+            if (weatherResult) weatherResult.hidden = false;
+            if (weatherStatus) weatherStatus.textContent = '这是你当前位置附近的实时天气。';
+            weatherButton.textContent = '重新查询 ↻';
+          } catch (error) {
+            if (weatherStatus) weatherStatus.textContent = '天气暂时没有加载成功，请检查网络后重试。';
+            weatherButton.textContent = '再试一次 ↻';
+          } finally {
+            weatherButton.disabled = false;
+          }
+        }, function (error) {
+          const message = error.code === 1 ? '你没有允许定位。可以在浏览器地址栏旁的权限设置中开启。' :
+            '暂时无法获取位置，请检查定位权限后重试。';
+          if (weatherStatus) weatherStatus.textContent = message;
+          weatherButton.disabled = false;
+          weatherButton.textContent = '重新尝试 ↻';
+        }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 });
+      });
+
       function updateScroll() {
         const max = document.documentElement.scrollHeight - window.innerHeight;
         const value = max > 0 ? (window.scrollY / max) * 100 : 0;
@@ -88,8 +185,10 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
       updateClock();
+      updateWorldClocks();
       updateScroll();
       window.setInterval(updateClock, 1000);
+      window.setInterval(updateWorldClocks, 1000);
       window.addEventListener('scroll', updateScroll, { passive: true });
       window.addEventListener('resize', updateScroll);
     })();
