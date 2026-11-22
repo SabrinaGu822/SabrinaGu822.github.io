@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'zh-CN' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5f0">
+  {% seo %}
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% feed_meta %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <span class="brand-mark">叙</span>
+        <span><strong>{{ site.title }}</strong><small>{{ site.description }}</small></span>
+      </a>
+      <nav class="nav">
+        <a href="{{ '/' | relative_url }}">首页</a>
+        <a href="{{ '/diary/' | relative_url }}">日记与随笔</a>
+        <a href="{{ '/travel/' | relative_url }}">旅行</a>
+        <a href="{{ '/photos/' | relative_url }}">照片</a>
+        <a href="{{ '/notes/' | relative_url }}">学习笔记</a>
+        <a href="{{ '/reading/' | relative_url }}">读书与观影</a>
+        <a href="{{ '/fragments/' | relative_url }}">生活碎片</a>
+        <a href="{{ '/about/' | relative_url }}">关于</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">{{ content }}</main>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>慢慢写，慢慢生活。</span>
+      <span>© {{ site.time | date: "%Y" }} {{ site.author }} · Built with GitHub Pages</span>
+    </div>
+  </footer>
+</body>
+</html>
