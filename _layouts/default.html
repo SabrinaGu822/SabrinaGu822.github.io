@@ -28,11 +28,71 @@
     </div>
   </header>
   <main class="wrap">{{ content }}</main>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部">↑</button>
   <footer class="site-footer">
     <div class="wrap footer-inner">
       <span>慢慢写，慢慢生活。</span>
       <span>© {{ site.time | date: "%Y" }} {{ site.author }} · Built with GitHub Pages</span>
     </div>
   </footer>
+  <script>
+    (function () {
+      const clock = document.getElementById('live-clock');
+      const date = document.getElementById('live-date');
+      const zone = document.getElementById('live-zone');
+      const greeting = document.getElementById('now-greeting');
+      const dayNote = document.getElementById('live-day');
+      const progress = document.getElementById('reading-progress');
+      const topButton = document.getElementById('back-to-top');
+
+      function updateClock() {
+        if (!clock) return;
+        const now = new Date();
+        const time = new Intl.DateTimeFormat('zh-CN', {
+          hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        }).format(now);
+        const dateText = new Intl.DateTimeFormat('zh-CN', {
+          year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+        }).format(now);
+        clock.textContent = time;
+        clock.dateTime = now.toISOString();
+        if (date) date.textContent = dateText;
+        if (zone) {
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time';
+          zone.textContent = tz.replace(/_/g, ' ');
+        }
+        if (greeting) {
+          const hour = now.getHours();
+          greeting.textContent = hour < 6 ? '夜深了，愿你安眠。' :
+            hour < 11 ? '早上好，愿今天有新的微光。' :
+            hour < 14 ? '午间好，记得给自己一点时间。' :
+            hour < 18 ? '下午好，愿日常温柔而明亮。' :
+            hour < 22 ? '晚上好，欢迎回到自己的小世界。' : '夜深了，愿心事慢慢沉静。';
+        }
+        if (dayNote) {
+          const start = new Date(now.getFullYear(), 0, 0);
+          const day = Math.floor((now - start) / 86400000);
+          dayNote.textContent = 'YEAR ' + now.getFullYear() + ' · DAY ' + String(day).padStart(3, '0');
+        }
+      }
+
+      function updateScroll() {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const value = max > 0 ? (window.scrollY / max) * 100 : 0;
+        if (progress) progress.style.width = value + '%';
+        if (topButton) topButton.classList.toggle('visible', window.scrollY > 500);
+      }
+
+      if (topButton) topButton.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      updateClock();
+      updateScroll();
+      window.setInterval(updateClock, 1000);
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      window.addEventListener('resize', updateScroll);
+    })();
+  </script>
 </body>
 </html>
