@@ -36,17 +36,19 @@ layout: default
   <a class="muted" href="{{ '/photos/' | relative_url }}">所有照片 →</a>
 </section>
 <div class="photo-grid">
-  {% assign photo_posts = site.categories.photos | sort: 'date' | reverse %}
-  {% for post in photo_posts limit: 6 %}
-    {% if post.cover %}
-      <a class="photo-tile" href="{{ post.url | relative_url }}">
-        <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}">
-        <span>{{ post.title }}</span>
-      </a>
-    {% endif %}
+  {% if site.categories.photos %}
+    {% assign photo_posts = site.categories.photos | sort: 'date' | reverse %}
+    {% for post in photo_posts limit: 6 %}
+      {% if post.cover %}
+        <a class="photo-tile" href="{{ post.url | relative_url }}">
+          <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}">
+          <span>{{ post.title }}</span>
+        </a>
+      {% endif %}
+    {% endfor %}
   {% else %}
     <div class="photo-empty">这里会收藏你发布在「照片」分类中的文章封面。上传照片并将分类设为 photos 后，它们就会出现在这里。</div>
-  {% endfor %}
+  {% endif %}
 </div>
 
 <section class="note-band">
