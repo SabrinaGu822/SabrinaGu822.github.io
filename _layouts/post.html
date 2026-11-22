@@ -1,0 +1,19 @@
+---
+layout: default
+---
+<article class="article">
+  <a class="back-link" href="{{ '/' | relative_url }}">← 回到首页</a>
+  <header class="article-header">
+    <p class="eyebrow">{% if page.category %}{{ page.category }}{% else %}JOURNAL{% endif %} · {{ page.date | date: "%Y.%m.%d" }}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.excerpt %}<p class="article-excerpt">{{ page.excerpt }}</p>{% endif %}
+  </header>
+  {% if page.cover %}<img class="article-cover" src="{{ page.cover | relative_url }}" alt="{{ page.title }}">{% endif %}
+  <div class="prose">{{ content }}</div>
+  {% if page.tags %}<div class="tags">{% for tag in page.tags %}<span># {{ tag }}</span>{% endfor %}</div>{% endif %}
+  <div class="article-end">— 写于 {{ page.date | date: "%Y年%m月%d日" }} —</div>
+  <nav class="post-nav">
+    {% if page.previous %}<a href="{{ page.previous.url | relative_url }}">← {{ page.previous.title }}</a>{% endif %}
+    {% if page.next %}<a href="{{ page.next.url | relative_url }}">{{ page.next.title }} →</a>{% endif %}
+  </nav>
+</article>
