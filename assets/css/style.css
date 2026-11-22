@@ -263,3 +263,9 @@ img { display: block; max-width: 100%; }
   .cozy-card { min-height:0;padding:20px; }
   .cozy-heading { align-items:flex-start;flex-direction:column; }
 }
+
+
+/* Published article counter */
+.article-count { display:flex;align-items:baseline;gap:8px;margin:2px 0 12px;padding-top:11px;border-top:1px solid rgba(166,190,205,.1); }
+.article-count-number { color:#b8d4e1;font:500 25px/1 'DM Sans',sans-serif;font-variant-numeric:tabular-nums; }
+.article-count-label { color:#8fa4b1;font-size:10px;letter-spacing:.04em; }
